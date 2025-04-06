@@ -7,8 +7,9 @@ import MovieCard from "@/components/MovieCard";
 import { useRouter } from "expo-router";
 import { icons } from "@/constants/icons";
 import Searchbar from "@/components/searchbar";
+import { updateSearchCount } from "@/services/appwrite";
 
-const search = () => {
+const SearchScreen = () => {
   const [search, setSearch] = useState("");
   const {
     data: movies,
@@ -19,15 +20,22 @@ const search = () => {
   } = useFetch(() => fetchMovies({ query: search }));
 
   useEffect(() => {
-    const timeoutId = setTimeout(async () => {
+    const timeoutId = setTimeout(() => {
       if (search.trim()) {
-        await loadMovies();
+        loadMovies();
       } else {
         reset();
       }
     }, 500);
     return () => clearTimeout(timeoutId);
   }, [search]);
+  // Add movies as a dependency
+
+  useEffect(() => {
+    if (Array.isArray(movies) && movies.length > 0 && movies?.[0]) {
+      updateSearchCount(search, movies[0]);
+    }
+  }, [movies]);
 
   return (
     <View className="flex-1 bg-primary">
@@ -97,4 +105,4 @@ const search = () => {
   );
 };
 
-export default search;
+export default SearchScreen;

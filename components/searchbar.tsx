@@ -25,6 +25,7 @@ const Searchbar = ({
       <TextInput
         onPress={onPress}
         value={value}
+        autoFocus={true}
         placeholder={placeholder}
         onChangeText={onChangeText}
         placeholderTextColor="#a8b5db"
